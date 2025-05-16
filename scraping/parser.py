@@ -1,22 +1,9 @@
 import os
-import sys
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from dataclasses import dataclass, asdict
 from bs4 import BeautifulSoup
 import re
-import scrapy
-import logging
 import csv
 
-
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format='%(asctime)',
-#     handlers=[
-#         logging.FileHandler('parser.log'),
-#         logging.StreamHandler(sys.stdout),
-#     ]
-# )
 
 class JobParser:
     def __init__(self, html):
@@ -32,48 +19,83 @@ class JobParser:
         numbers = re.findall((r'\d+'), h1.text)
         return int(numbers[0] if numbers else 0)
 
-    def get_job_previews(self) -> list:
-        vacancies = []
-        li_vacancies = self.soup.find_all("li", class_="l-vacancy") + self.soup.find_all("li", class_="l-vacancy __hot")
+    def get_job_links(self) -> list[str]:
+        links = []
+        li_vacancies = (self.soup.find_all(
+            "li", class_="l-vacancy") +
+                        self.soup.find_all(
+                            "li", class_="l-vacancy __hot")
+                        )
         for li in li_vacancies:
-            vacancy = {}
-            date_tag = li.find("div", class_="date")
-            vacancy["date"] = date_tag.text.strip()
-
-            title_div = li.find("div", class_="title")
-            if title_div:
-                a_tag = title_div.find("a", class_="vt")
-                vacancy["title"] = a_tag.text.strip()
-                vacancy["link"] = a_tag["href"]
-                company_tag = title_div.find("a", class_="company")
-                vacancy["company"] = company_tag.text.strip()
-                city_tag = title_div.find("span", class_="cities")
-                vacancy["location"] = city_tag.text.strip()
-                vacancies.append(vacancy)
-            else:
-                vacancy["title"] = vacancy["link"] = vacancy["company"] = vacancy["location"] = ""
-
-        return vacancies
-
-    def save_to_file(self, vacancies: list):
-        output_path = os.path.abspath(r"G:\projects\scryping\python-technologies-statistics\data\processed\output.csv")
-        output_dir = os.path.dirname(output_path)
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
-        with open(output_path, mode="w", newline="", encoding="utf-8") as file:
-            fieldnames = ["date", "title", "company", "link", "location"]
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(vacancies)
-
-        print(f"Дані збережено у файл: {output_path}")
+            a_tag = li.find("a", class_="vt")
+            if a_tag and a_tag.get("href"):
+                links.append(a_tag["href"])
+        return links
 
 
-class JobDetailParser:
-    def __init__(self, html):
-        self.soup = BeautifulSoup(html, 'html.parser')
+@dataclass
+class JobDetail:
+    date: str
+    title: str
+    company: str
+    location: str
+    description: str
+    link: str
 
-    def extract_full_description(self) -> str:
-        desc = self.soup.find("div", class_="vacancy-section")
-        return desc.get_text(separator="\n").strip() if desc else ""
+
+def clean_text(text: str) -> str:
+    if not isinstance(text, str):
+        return text
+    text = re.sub(r"[\u00A0\u2009\u202F\xa0]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def clean_fields(func):
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        if isinstance(result, JobDetail):
+            for field in ['title', 'company', 'location', 'description', 'date']:
+                if hasattr(result, field):
+                    value = getattr(result, field)
+                    if isinstance(value, str):
+                        setattr(result, field, clean_text(value))
+        return result
+
+    return wrapper
+
+
+@clean_fields
+def parse_job_previews(link: str, html: str) -> JobDetail:
+    soup = BeautifulSoup(html, "html.parser")
+    title_elem = soup.find("h1", class_="g-h2")
+    company_elem = soup.find("div", class_="l-n").find("a")
+    location_elem = soup.find("div", class_="sh-info")
+    description_elem = soup.find("div", class_="b-typo vacancy-section")
+    date_elem = soup.find("div", class_="date")
+
+    return JobDetail(
+
+        title=title_elem.text.strip() if title_elem else None,
+        company=company_elem.text.strip() if company_elem else None,
+        location=location_elem.text.strip() if location_elem else None,
+        description=description_elem.text.strip() if description_elem else None,
+        date=date_elem.contents[0].text.strip() if date_elem else None,
+        link=link,
+
+    )
+
+
+def save_to_file(vacancies: list[JobDetail]):
+    output_path = os.path.abspath(r"G:\projects\scryping\python-technologies-statistics\data\processed\output.csv")
+    output_dir = os.path.dirname(output_path)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    with open(output_path, mode="w", newline="", encoding="utf-8") as file:
+        fieldnames = ["date", "title", "company", "location", "description", "link"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        for vacancy in vacancies:
+            writer.writerow(asdict(vacancy))
+
+    print(f"Дані збережено у файл: {output_path}")
