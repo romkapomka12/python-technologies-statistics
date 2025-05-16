@@ -1,12 +1,30 @@
-import requests
-from config.config import JOB_SEARCH_URL, HEADERS
+import time
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from config.config import JOB_SEARCH_URL
 
 
 class Scraper(object):
-    def __init__(self, url=JOB_SEARCH_URL, headers=HEADERS):
+    def __init__(self, url=JOB_SEARCH_URL):
         self.url = url
-        self.headers = headers
 
-    def single_page(self):
-        response = requests.get(self.url, headers=self.headers)
-        return response.text
+    def all_pages(self):
+
+        driver = webdriver.Chrome()
+        driver.get(self.url)
+        time.sleep(1)
+        while True:
+            try:
+                button = driver.find_element(By.CSS_SELECTOR, "div.more-btn a")
+                button.click()
+                time.sleep(1)
+                if not button.is_displayed():
+                    break
+
+            except NoSuchElementException:
+                print("Кнопка не знайдена. Завершення.")
+                break
+        html = driver.page_source
+        driver.close()
+        return html
