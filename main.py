@@ -3,11 +3,11 @@ from scraping.parser import JobParser
 
 
 def main():
-    print("Завантаження головної сторінки...")
+    print("Завантаження всієї інформації (через Selenium)...")
     scraper = Scraper()
-    html = scraper.single_page()
+    html = scraper.all_pages()
 
-    print("Парсинг сторінки...")
+    print("Парсинг всіх сторінок...")
     parser = JobParser(html)
 
     total = parser.get_total_vacancies()
@@ -16,7 +16,7 @@ def main():
     job_previews = parser.get_job_previews()
     print(f"Знайдено {len(job_previews)} вакансій на першій сторінці.")
     print("Приклади посилань:")
-    for job in job_previews:
+    for job in job_previews[:3]:
         print(f"{job['date']} | {job['title']} | {job['location']}")
 
     parser.save_to_file(job_previews)
