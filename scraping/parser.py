@@ -1,8 +1,8 @@
-import os
-from dataclasses import dataclass, asdict
+from models.models import JobDetail
 from bs4 import BeautifulSoup
 import re
-import csv
+from config.technologies import technologies_list
+from utils.save import extract_technologies_by_category
 
 
 class JobParser:
@@ -33,16 +33,6 @@ class JobParser:
         return links
 
 
-@dataclass
-class JobDetail:
-    date: str
-    title: str
-    company: str
-    location: str
-    description: str
-    link: str
-
-
 def clean_text(text: str) -> str:
     if not isinstance(text, str):
         return text
@@ -67,11 +57,16 @@ def clean_fields(func):
 @clean_fields
 def parse_job_previews(link: str, html: str) -> JobDetail:
     soup = BeautifulSoup(html, "html.parser")
+
     title_elem = soup.find("h1", class_="g-h2")
     company_elem = soup.find("div", class_="l-n").find("a")
     location_elem = soup.find("div", class_="sh-info")
     description_elem = soup.find("div", class_="b-typo vacancy-section")
     date_elem = soup.find("div", class_="date")
+
+    title = title_elem.get_text() if title_elem else ""
+    description = description_elem.get_text() if description_elem else ""
+    matched_techs = extract_technologies_by_category(title, description, technologies_list)
 
     return JobDetail(
 
@@ -81,21 +76,6 @@ def parse_job_previews(link: str, html: str) -> JobDetail:
         description=description_elem.text.strip() if description_elem else None,
         date=date_elem.contents[0].text.strip() if date_elem else None,
         link=link,
+        technologies=matched_techs,
 
     )
-
-
-def save_to_file(vacancies: list[JobDetail]):
-    output_path = os.path.abspath(r"G:\projects\scryping\python-technologies-statistics\data\processed\output.csv")
-    output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    with open(output_path, mode="w", newline="", encoding="utf-8") as file:
-        fieldnames = ["date", "title", "company", "location", "description", "link"]
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-        for vacancy in vacancies:
-            writer.writerow(asdict(vacancy))
-
-    print(f"Дані збережено у файл: {output_path}")
