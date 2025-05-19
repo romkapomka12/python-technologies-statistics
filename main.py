@@ -2,7 +2,9 @@
 from datetime import datetime
 
 from scraping.scraper import Scraper
-from scraping.parser import JobDetail, JobParser, parse_job_previews, save_to_file
+from scraping.parser import JobParser, parse_job_previews
+from utils.save import save_to_file
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
