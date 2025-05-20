@@ -1,3 +1,4 @@
+import random
 import time
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -13,12 +14,12 @@ class Scraper(object):
 
         driver = webdriver.Chrome()
         driver.get(self.url)
-        time.sleep(1)
+        time.sleep(random.uniform(1, 4))
         while True:
             try:
                 button = driver.find_element(By.CSS_SELECTOR, "div.more-btn a")
                 button.click()
-                time.sleep(1)
+                time.sleep(random.uniform(1, 3))
                 if not button.is_displayed():
                     break
 
