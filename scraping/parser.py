@@ -1,8 +1,8 @@
 from models.models import JobDetail
 from bs4 import BeautifulSoup
 import re
-from config.technologies import technologies_list
-from utils.save import extract_technologies_by_category
+from config.technologies import technologies_list, years_of_experience
+from utils.save import extract_technologies_by_category, extract_experience
 
 
 class JobParser:
@@ -44,7 +44,17 @@ def clean_fields(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         if isinstance(result, JobDetail):
-            for field in ['title', 'company', 'location', 'description', 'date']:
+            for field in [
+                'title',
+                'company',
+                'location',
+                'salary',
+                'experience',
+                'description',
+                'date',
+                'link',
+                'technologies'
+            ]:
                 if hasattr(result, field):
                     value = getattr(result, field)
                     if isinstance(value, str):
@@ -59,20 +69,23 @@ def parse_job_previews(link: str, html: str) -> JobDetail:
     soup = BeautifulSoup(html, "html.parser")
 
     title_elem = soup.find("h1", class_="g-h2")
-    company_elem = soup.find("div", class_="l-n").find("a")
+    company_elem = soup.select_one("div.l-n > a")
     location_elem = soup.find("div", class_="sh-info")
+    salary_elem = soup.find("span", class_="salary")
     description_elem = soup.find("div", class_="b-typo vacancy-section")
     date_elem = soup.find("div", class_="date")
 
     title = title_elem.get_text() if title_elem else ""
     description = description_elem.get_text() if description_elem else ""
     matched_techs = extract_technologies_by_category(title, description, technologies_list)
-
+    matched_exp = extract_experience(description, years_of_experience)
     return JobDetail(
 
         title=title_elem.text.strip() if title_elem else None,
         company=company_elem.text.strip() if company_elem else None,
         location=location_elem.text.strip() if location_elem else None,
+        salary=salary_elem.text.strip() if salary_elem else None,
+        experience=matched_exp,
         description=description_elem.text.strip() if description_elem else None,
         date=date_elem.contents[0].text.strip() if date_elem else None,
         link=link,
