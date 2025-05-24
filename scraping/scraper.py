@@ -92,10 +92,11 @@ class JobsDouScraper(BaseScraper):
         while True:
             try:
                 button = self.driver.find_element(By.CSS_SELECTOR, "div.more-btn a")
+
                 if not button.is_displayed():
                     break
                 button.click()
-                # time.sleep(random.uniform(2, 4))
+                time.sleep(random.uniform(2, 3))
                 html_pages.append(self.driver.page_source)
 
             except NoSuchElementException:

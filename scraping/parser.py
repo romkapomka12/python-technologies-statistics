@@ -5,6 +5,11 @@ from utils.cleaning import clean_fields
 from utils.save import extract_technologies_by_category, extract_experience
 
 
+# class JobParser:
+#     def __init__(self, html):
+#         self.soup = BeautifulSoup(html, 'html.parser')
+
+
 @clean_fields
 def parse_dou_ua_previews(link: str, html: str) -> JobDetail:
     soup = BeautifulSoup(html, "html.parser")
@@ -27,7 +32,6 @@ def parse_dou_ua_previews(link: str, html: str) -> JobDetail:
         location=location_elem.text.strip() if location_elem else None,
         salary=salary_elem.text.strip() if salary_elem else None,
         experience=matched_exp,
-        # description=description_elem.text.strip() if description_elem else None,
         date=date_elem.contents[0].text.strip() if date_elem else None,
         link=link,
         technologies=matched_techs,

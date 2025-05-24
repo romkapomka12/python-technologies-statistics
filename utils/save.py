@@ -1,6 +1,8 @@
 import csv
 import os
 from dataclasses import asdict
+
+from config.logger import logger
 from config.technologies import ignore_experience_list
 from models.models import JobDetail
 from utils.cleaning import clean_input_text
@@ -20,7 +22,6 @@ def save_to_file(vacancies: list[JobDetail]):
             "location",
             "salary",
             "experience",
-            # "description",
             "link",
             "technologies"
         ]
@@ -32,7 +33,7 @@ def save_to_file(vacancies: list[JobDetail]):
             row.pop("technologies_by_category", None)
             writer.writerow(row)
 
-    print(f"Дані збережено у файл: {output_path}")
+    logger.info("Дані успішно збережено у %s", output_path)
 
 
 def extract_technologies_by_category(title: str, description: str, tech_list: list[str]) -> list[str]:

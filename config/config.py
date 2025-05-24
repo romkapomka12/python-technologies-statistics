@@ -1,10 +1,10 @@
 import random
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-
 from webdriver_manager.chrome import ChromeDriverManager
+
+from config.logger import logger
 
 TECHNOLOGIES = [
     "Python", "Django", "Flask", "PostgreSQL", "Docker", "AWS",
@@ -31,14 +31,19 @@ def get_random_headers():
 
 
 def setup_driver() -> webdriver.Chrome:
-    options = Options()
-    options.add_argument(f"user-agent={get_random_headers()}")
-    options.add_argument("--headless=new")
-    options.add_argument("--disable-blink-features=AutomationControlled")
+    try:
+        logger.debug("Ініціалізація Chrome WebDriver")
+        options = Options()
+        options.add_argument(f"user-agent={get_random_headers()}")
+        options.add_argument("--headless=new")
+        options.add_argument("--disable-blink-features=AutomationControlled")
 
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
-    return driver
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=options)
+        return driver
+    except Exception as e:
+        logger.critical("Помилка ініціалізації WebDriver: %s", str(e), exc_info=True)
+        raise
 
 
 JOB_SEARCH_DOU_UA = "https://jobs.dou.ua/vacancies/?category=Python"

@@ -1,3 +1,5 @@
+import logging
+import sys
 from dataclasses import dataclass, field
 
 
@@ -11,3 +13,6 @@ class JobDetail:
     experience: list[str]
     link: str
     technologies: list[str] = field(default_factory=list)
+
+
+
