@@ -9,6 +9,5 @@ class JobDetail:
     location: str
     salary: str
     experience: list[str]
-    description: str
     link: str
     technologies: list[str] = field(default_factory=list)
