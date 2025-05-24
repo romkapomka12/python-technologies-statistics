@@ -27,10 +27,6 @@ class WorkUaScraper(BaseScraper):
     def get_num_pages(self) -> int:
         self.driver.get(self.url)
         try:
-
-            # WebDriverWait(self.driver, 10).until(
-            #     EC.presence_of_element_located((By.CSS_SELECTOR, "ul.pagination.hidden-xs"))
-            # )
             pagination = self.driver.find_element(By.CSS_SELECTOR, "ul.pagination.hidden-xs")
             page_links = pagination.find_elements(By.CSS_SELECTOR, "li:not(.no-style) > a")
             if not page_links:
