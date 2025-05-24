@@ -1,51 +1,43 @@
-# import requests
-from datetime import datetime
-
-from scraping.scraper import Scraper
-from scraping.parser import JobParser, parse_job_previews
+from config.config import JOB_SEARCH_WORK_UA, JOB_SEARCH_DOU_UA
+from data.processed.processing import collect_vacancies_from_site, collect_links_metadata
+from scraping.scraper import JobsDouScraper, WorkUaScraper
+from scraping.parser import parse_dou_ua_previews, parse_work_ua_previews
 from utils.save import save_to_file
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
 def main():
-    print("Завантаження всієї інформації (через Selenium)...")
-    scraper = Scraper()
-    html = scraper.all_pages()
+    links_dou, pages_dou, count_dou, driver_dou = collect_links_metadata(
+        JobsDouScraper, JOB_SEARCH_DOU_UA, "DOU.UA"
+    )
 
-    print("Парсинг всіх сторінок...")
-    parser = JobParser(html)
-    links = parser.get_job_links()
+    links_work, pages_work, count_work, driver_work = collect_links_metadata(
+        WorkUaScraper, JOB_SEARCH_WORK_UA, "Work.ua"
+    )
 
-    options = Options()
-    options.add_argument("--headless")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    start_time = datetime.now()
-    vacancies = []
-    for i, link in enumerate(links):
-        try:
-            print(f"➡️ {i + 1}. Обробка: {link}")
-            driver.get(link)
-            html = driver.page_source
-            vacancy = parse_job_previews(link, html)
-            vacancies.append(vacancy)
-        except Exception as e:
-            print(f"Помилка при парсингу: {e}")
+    print("\n📊 ЗАГАЛЬНА ІНФОРМАЦІЯ ДО ЗБОРУ ОПИСІВ:")
+    print(f"🔹 DOU.UA — {pages_dou} сторінок, {count_dou} посилань")
+    print(f"🔹 Work.ua — {pages_work} сторінок, {count_work} посилань")
 
-    total = parser.get_total_vacancies()
-    print(f"Загальна кількість вакансій: {total}")
+    vacancies_dou = collect_vacancies_from_site(
+        JobsDouScraper,
+        JOB_SEARCH_DOU_UA,
+        parse_dou_ua_previews,
+        "DOU.UA"
+    )
 
-    end_time = datetime.now()
-    duration = end_time - start_time
-    print(f"⏱ Тривалість виконання: {duration}")
+    vacancies_work = collect_vacancies_from_site(
+        WorkUaScraper,
+        JOB_SEARCH_WORK_UA,
+        parse_work_ua_previews,
+        "Work.ua"
+    )
 
-    job_previews = parser.get_job_links()
-    print(f"Знайдено {len(job_previews)} вакансій.")
+    all_vacancies = vacancies_dou + vacancies_work
+    save_to_file(all_vacancies)
 
-    save_to_file(vacancies)
+    print(f"\n✅ Усього збережено: {len(all_vacancies)} вакансій")
 
 
 if __name__ == "__main__":
     main()
+
