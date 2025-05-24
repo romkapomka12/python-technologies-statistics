@@ -1,5 +1,11 @@
 import random
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+
+from webdriver_manager.chrome import ChromeDriverManager
+
 TECHNOLOGIES = [
     "Python", "Django", "Flask", "PostgreSQL", "Docker", "AWS",
     "JavaScript", "React", "FastAPI", "Git", "Linux", "Celery"
@@ -17,10 +23,25 @@ USER_AGENTS = [
 
 def get_random_headers():
     return {
-        "User-Agent": random.choice(USER_AGENTS)
+        "User-Agent": random.choice(USER_AGENTS),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+
     }
 
 
-JOB_SEARCH_URL = "https://jobs.dou.ua/vacancies/?category=Python"
+def setup_driver() -> webdriver.Chrome:
+    options = Options()
+    options.add_argument(f"user-agent={get_random_headers()}")
+    options.add_argument("--headless=new")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=options)
+    return driver
+
+
+JOB_SEARCH_DOU_UA = "https://jobs.dou.ua/vacancies/?category=Python"
+JOB_SEARCH_WORK_UA = "https://www.work.ua/jobs-it-python/"
 
 CSV_OUTPUT_PATH = "data/processed/output.csv"
