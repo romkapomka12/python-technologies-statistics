@@ -53,7 +53,7 @@ def extract_experience(description: str, years_of_experience: list[str]) -> list
     for exp in years_of_experience:
         if exp in description_lower:
             possition = description_lower.find(exp.lower())
-            start_position = max(0, possition - 20)
+            start_position = max(0, possition - 50)
             preceding_text = description[start_position:possition]
 
             if any(phrase in preceding_text for phrase in ignore_experience_list):
