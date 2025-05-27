@@ -36,16 +36,16 @@ def save_to_file(vacancies: list[JobDetail]):
     logger.info("Дані успішно збережено у %s", output_path)
 
 
-def extract_technologies_by_category(title: str, description: str, tech_list: list[str]) -> list[str]:
+def extract_technologies_by_category(title: str, description: str,  technologies_list, soft_skills_list) -> list[str]:
     if not title and description:
         return []
     description_lower = description.lower()
     title_lower = title.lower()
-    return [tech for tech in tech_list if tech.lower() in description_lower and title_lower]
+    return [tech for tech in technologies_list or soft_skills_list if tech.lower() in description_lower and title_lower]
 
 
 @clean_input_text
-def extract_experience(description: str, years_of_experience: list[str]) -> list[str]:
+def extract_experience_by_dou_ua(description: str, years_of_experience: list[str]) -> list[str]:
     if not description:
         return []
     description_lower = description.lower()

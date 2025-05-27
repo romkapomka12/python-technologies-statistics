@@ -1,13 +1,8 @@
 from models.models import JobDetail
 from bs4 import BeautifulSoup
-from config.technologies import technologies_list, years_of_experience, ua_experience_list
+from config.technologies import technologies_list, years_of_experience, soft_skills_list
 from utils.cleaning import clean_fields
-from utils.save import extract_technologies_by_category, extract_experience, extract_experience_by_work_ua
-
-
-# class JobParser:
-#     def __init__(self, html):
-#         self.soup = BeautifulSoup(html, 'html.parser')
+from utils.save import extract_technologies_by_category, extract_experience_by_dou_ua, extract_experience_by_work_ua
 
 
 @clean_fields
@@ -23,8 +18,8 @@ def parse_dou_ua_previews(link: str, html: str) -> JobDetail:
 
     title = title_elem.get_text() if title_elem else ""
     description = description_elem.get_text() if description_elem else ""
-    matched_techs = extract_technologies_by_category(title, description, technologies_list)
-    matched_exp = extract_experience(description, years_of_experience)
+    matched_techs = extract_technologies_by_category(title, description, technologies_list, soft_skills_list)
+    matched_exp = extract_experience_by_dou_ua(description, years_of_experience)
 
     return JobDetail(
         title=title_elem.text.strip() if title_elem else None,
