@@ -8,7 +8,7 @@ from utils.save import save_to_file
 
 def main():
 
-    logger.info("\n📊 ЗАГАЛЬНА ІНФОРМАЦІЯ ДО ЗБОРУ ОПИСІВ:")
+    logger.info("\n ЗАГАЛЬНА ІНФОРМАЦІЯ ДО ЗБОРУ ОПИСІВ:")
 
     dou_vacancies = collect_vacancies_from_site(
         JobsDouScraper, JOB_SEARCH_DOU_UA, parse_dou_ua_previews, "DOU.UA"
@@ -19,8 +19,9 @@ def main():
     )
 
     save_to_file(dou_vacancies + work_vacancies)
-    logger.info("\n🏁 Усі дані успішно зібрано та збережено")
+    logger.info("\n Усі дані успішно зібрано та збережено")
 
 
 if __name__ == "__main__":
+    setup_logging()
     main()

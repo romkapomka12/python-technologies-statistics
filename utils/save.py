@@ -73,3 +73,17 @@ def extract_experience(description: str, years_of_experience: list[str]) -> list
                     found_experience.append(numbers[0])
 
     return list(set(found_experience)) if found_experience else []
+
+
+def extract_experience_by_work_ua(experience: str) -> list[str]:
+    if not experience:
+        return []
+
+    experience_lower = experience.lower()
+    found_experience = []
+
+    for word in experience_lower.split():
+        cleaned_word = word.strip(",.:+ - ()")
+        if cleaned_word.isdigit():
+            found_experience.append(cleaned_word)
+    return list(set(found_experience)) if found_experience else []

@@ -3,13 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-
 from config.logger import logger
 
-TECHNOLOGIES = [
-    "Python", "Django", "Flask", "PostgreSQL", "Docker", "AWS",
-    "JavaScript", "React", "FastAPI", "Git", "Linux", "Celery"
-]
 
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
@@ -32,7 +27,7 @@ def get_random_headers():
 
 def setup_driver() -> webdriver.Chrome:
     try:
-        logger.debug("Ініціалізація Chrome WebDriver")
+        logger.info("Ініціалізація Chrome WebDriver")
         options = Options()
         options.add_argument(f"user-agent={get_random_headers()}")
         options.add_argument("--headless=new")

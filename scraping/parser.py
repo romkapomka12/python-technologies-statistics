@@ -1,8 +1,8 @@
 from models.models import JobDetail
 from bs4 import BeautifulSoup
-from config.technologies import technologies_list, years_of_experience
+from config.technologies import technologies_list, years_of_experience, ua_experience_list
 from utils.cleaning import clean_fields
-from utils.save import extract_technologies_by_category, extract_experience
+from utils.save import extract_technologies_by_category, extract_experience, extract_experience_by_work_ua
 
 
 # class JobParser:
@@ -47,7 +47,11 @@ def parse_work_ua_previews(link: str, html: str) -> JobDetail:
     company_elem = soup.select_one("a span.strong-500")
     location_elem = soup.find('span', title=lambda t: t and "роботи" in t)
     salary_elem = soup.select_one("li.text-indent > span.strong-500")
+
     experience_elem = soup.select_one('li:has(span[title="Умови й вимоги"])')
+    experience = experience_elem.get_text() if experience_elem else ""
+    matched_exp = extract_experience_by_work_ua(experience)
+
     date_elem = soup.select_one("ul.list-unstyled > li.no-style")
     tech_list_elem = soup.select_one("div.mt-2xl > ul.flex")
 
@@ -56,7 +60,7 @@ def parse_work_ua_previews(link: str, html: str) -> JobDetail:
         company=company_elem.get_text(strip=True) if company_elem else None,
         location=location_elem.next_sibling.strip() if location_elem else None,
         salary=salary_elem.get_text(strip=True) if salary_elem else None,
-        experience=experience_elem.get_text(strip=True) if experience_elem else None,
+        experience=matched_exp,
         date=date_elem.get_text(strip=True) if date_elem else None,
         link=link,
         technologies=[li.get_text(strip=True) for li in tech_list_elem.select("li")] if tech_list_elem else []
