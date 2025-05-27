@@ -3,6 +3,7 @@ __pycache__/
 .env
 cache/
 venv/
-data/processed/output.csv
-data/processed/cache_vacancies
-config/parser.log
+data/output.csv
+data/cache_vacancies
+logs/parser.log
+data*/
