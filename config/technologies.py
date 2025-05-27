@@ -1,18 +1,43 @@
 technologies_list = [
-    "python", "flask", "django", "fastapi",
-    "docker", "kubernetes",
-    "aws", "gcp", "azure",
-    "postgresql", "mysql", "sqlite", "mongodb",
-    "numpy", "pandas", "scikit-learn",
-    "tensorflow", "pytorch", "selenium",
-    "beautifulsoup", "opencv", "gstreamer",
-    "redis", "linux", "bash", "rest api", "CI/CD pipelines",
-    " n8n", "Zapier", "JavaScript", "Redis", "Elasticsearch",
-    "AWS", "AI API", "GraphQL", "ML/AI ", "OpenAI", "Claude", "Linux", "English", "англійська"
-    "Github", "Dynatrace", "NewRelic", "Dynamics", "ReactJS", "HTML5", "CSS3/SCSS", " ASINC.IO",
-    "aiohttp",
-    "Kafka", "MQTT", "SQLAlchemy", "AI/ML", "Django REST", "React"
+    "pandas", "numpy", "jira", "confluence", "selenium", "playwright", "aiohttp",
+    "blender", "unity", "laravel", "powershell", "vb.net", "n8n", "bootstrap", "aiogram", "grpc",
+    "json web token", "solid principles", "alembic", "google api", "telegram api", "openai",
+    "ip (internet protocol)", "tcp/ip", "bash", "jenkins", "ansible", "pytest", "scratch", "roblox",
+    "adobe photoshop", "microsoft 365", "ms access", "c#", "web scraping", "data scraping",
+    "version control system", "bug tracking tools", "analytical thinking", "business-analysis",
+    "technical support for users", "troubleshooting", "setting up virtual machines", "web design",
+    "pedagogy", "teaching", "working with children", "creative approach", "initiative",
+    "independence", "productivity", "self-learning", "teamwork", "documentation", "reporting",
+    "honesty", "reliability", "organizational skills", "attention to detail", "communication skills",
+    "responsibility", "activity", "creativity", "programming", "teaching", "working with children",
+    "web design", "website development", "analytical thinking", "business-analysis",
+    "technical support for users", "troubleshooting", "setting up virtual machines",
+    "web scraping", "data scraping", "version control system", "bug tracking tools",
+    "analytical thinking", "business-analysis", "technical support for users",
+    "troubleshooting", "setting up virtual machines", "gcp", "azure", "scikit-learn", "pytorch",
+    "beautifulsoup", "gstreamer",
+    "zapier", "dynatrace", "newrelic", "dynamics", "reactjs",
+    "html5", "css3/scss", "kafka", "mqtt", "django rest", "claude", "ml/ai",
+    "ai/ml", "ai api", "asinc.io"
+]
 
+soft_skills_list = [
+    "активність", "креативність", "викладання", "творчий підхід",
+    "ініціативність", "комунікабельність", "здатність до навчання",
+    "уважність", "організованість", "бажання вчитися і розвиватися",
+    "аналітичне мислення", "педагогіка", "робота з дітьми",
+    "самостійність", "продуктивність", "ведення crm", "користувач 1с",
+    "продаж", "ведення документації", "написання тест-кейсів",
+    "написання bug reports", "ведення звітності", "чесність",
+    "надійність", "відповідальність", "робота в команді", "activity",
+    "creativity", "teaching", "creative approach",
+    "initiative", "sociability", "ability to learn",
+    "attention", "organization", "desire to learn and develop",
+    "analytical thinking", "pedagogy", "working with children",
+    "independence", "productivity", "crm management", "1c user",
+    "sales", "documentation management", "writing test cases",
+    "writing bug reports", "reporting", "honesty",
+    "reliability", "responsibility", "teamwork"
 ]
 
 
