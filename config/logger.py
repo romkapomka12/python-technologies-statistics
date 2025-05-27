@@ -1,4 +1,3 @@
-
 import logging
 import sys
 from pathlib import Path
@@ -12,11 +11,11 @@ def setup_logging():
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=[
-            logging.FileHandler('config/parser.log', encoding='utf-8'),
+            logging.FileHandler('logs/parser.log', encoding='utf-8'),
             logging.StreamHandler(sys.stdout),
         ]
     )
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
