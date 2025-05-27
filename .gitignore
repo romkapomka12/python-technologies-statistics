@@ -1,6 +1,9 @@
 __pycache__/
 *.pyc
 .env
+cache/
 venv/
 data/raw/*
-data/processed/*
+data/processed/output.csv
+data/processed/cache_vacancies
+config/parser.log
