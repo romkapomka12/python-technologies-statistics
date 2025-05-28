@@ -1,18 +1,15 @@
 import random
 import time
-# from datetime import time
 from typing import List, Any, Tuple, Callable
-
 from tqdm import tqdm
 from config.logger import logger
 from processed.cache import load_vacancy_from_cache, save_vacancy_to_cache
 from models.models import JobDetail
-from config.config import setup_driver
-
+from selenium import webdriver
 
 class VacancyProcessor:
     def __init__(self):
-        self.driver = setup_driver()
+        self.driver = webdriver.Chrome()
 
     def __enter__(self):
         return self
@@ -87,7 +84,6 @@ def collect_vacancies_from_site(
         site_name: str,
 
 ) -> List[Any]:
-
     with VacancyProcessor() as processor:
         try:
             links, _, _ = processor.collect_metadata(scraper_cls, url, site_name)
