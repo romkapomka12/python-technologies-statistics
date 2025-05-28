@@ -1,7 +1,6 @@
 import csv
 import os
 from dataclasses import asdict
-
 from config.logger import logger
 from config.technologies import ignore_experience_list
 from models.models import JobDetail
@@ -36,12 +35,11 @@ def save_to_file(vacancies: list[JobDetail]):
     logger.info("Дані успішно збережено у %s", output_path)
 
 
-def extract_technologies_by_category(title: str, description: str,  technologies_list, soft_skills_list) -> list[str]:
-    if not title and description:
+def extract_technologies_by_category(description: str,  technologies_list, soft_skills_list) -> list[str]:
+    if not description:
         return []
     description_lower = description.lower()
-    title_lower = title.lower()
-    return [tech for tech in technologies_list or soft_skills_list if tech.lower() in description_lower and title_lower]
+    return [tech for tech in technologies_list or soft_skills_list if tech.lower() in description_lower]
 
 
 @clean_input_text

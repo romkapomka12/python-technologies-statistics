@@ -16,9 +16,9 @@ def parse_dou_ua_previews(link: str, html: str) -> JobDetail:
     description_elem = soup.find("div", class_="b-typo vacancy-section")
     date_elem = soup.find("div", class_="date")
 
-    title = title_elem.get_text() if title_elem else ""
+    # title = title_elem.get_text() if title_elem else ""
     description = description_elem.get_text() if description_elem else ""
-    matched_techs = extract_technologies_by_category(title, description, technologies_list, soft_skills_list)
+    matched_techs = extract_technologies_by_category(description, technologies_list, soft_skills_list)
     matched_exp = extract_experience_by_dou_ua(description, years_of_experience)
 
     return JobDetail(
