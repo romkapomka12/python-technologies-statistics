@@ -1,8 +1,11 @@
+
+from config.config import EXCHANGE_RATE
 from models.models import JobDetail
 from bs4 import BeautifulSoup
 from config.technologies import technologies_list, years_of_experience, soft_skills_list
 from utils.cleaning import clean_fields
-from utils.save import extract_technologies_by_category, extract_experience_by_dou_ua, extract_experience_by_work_ua
+from utils.save import extract_technologies_by_category, extract_experience_by_dou_ua, extract_experience_by_work_ua, \
+    convertation_salary_to_usd
 
 
 @clean_fields
@@ -41,7 +44,10 @@ def parse_work_ua_previews(link: str, html: str) -> JobDetail:
     title_elem = soup.select_one("h1.my-0")
     company_elem = soup.select_one("a span.strong-500")
     location_elem = soup.find('span', title=lambda t: t and "роботи" in t)
+
     salary_elem = soup.select_one("li.text-indent > span.strong-500")
+    salary = salary_elem.get_text(strip=True) if salary_elem else None
+    convertation_salary = convertation_salary_to_usd(salary, EXCHANGE_RATE)
 
     experience_elem = soup.select_one('li:has(span[title="Умови й вимоги"])')
     experience = experience_elem.get_text() if experience_elem else ""
@@ -51,10 +57,10 @@ def parse_work_ua_previews(link: str, html: str) -> JobDetail:
     tech_list_elem = soup.select_one("div.mt-2xl > ul.flex")
 
     return JobDetail(
-        title=title_elem.get_text(strip=True) if title_elem else None,
+        title=title_elem.get_text(" ", strip=True) if title_elem else None,
         company=company_elem.get_text(strip=True) if company_elem else None,
         location=location_elem.next_sibling.strip() if location_elem else None,
-        salary=salary_elem.get_text(strip=True) if salary_elem else None,
+        salary=convertation_salary,
         experience=matched_exp,
         date=date_elem.get_text(strip=True) if date_elem else None,
         link=link,

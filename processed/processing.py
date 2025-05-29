@@ -7,6 +7,7 @@ from processed.cache import load_vacancy_from_cache, save_vacancy_to_cache
 from models.models import JobDetail
 from selenium import webdriver
 
+
 class VacancyProcessor:
     def __init__(self):
         self.driver = webdriver.Chrome()

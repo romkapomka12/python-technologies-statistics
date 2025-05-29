@@ -1,5 +1,6 @@
 import csv
 import os
+import re
 from dataclasses import asdict
 from config.logger import logger
 from config.technologies import ignore_experience_list
@@ -85,3 +86,27 @@ def extract_experience_by_work_ua(experience: str) -> list[str]:
         if cleaned_word.isdigit():
             found_experience.append(cleaned_word)
     return list(set(found_experience)) if found_experience else []
+
+
+def convertation_salary_to_usd(salary: str, EXCHANGE_RATE):
+    if salary is None:
+        return None
+
+    clean_str = re.sub(r'\s+', '', salary).lower()
+
+    if "$" in clean_str:
+        return salary.strip()
+
+    if "грн" in clean_str or "₴" in clean_str:
+        numbers = [int(n) for n in re.findall(r'\d+', clean_str)]
+        if not numbers:
+            return None
+        if len(numbers) == 1:
+            usd = round(numbers[0] / EXCHANGE_RATE)
+            return f"${usd}"
+        else:
+            min_usd = round(numbers[0] / EXCHANGE_RATE)
+            max_usd = round(numbers[1] / EXCHANGE_RATE)
+            return f"${min_usd}-{max_usd}"
+
+    return None

@@ -45,3 +45,5 @@ JOB_SEARCH_DOU_UA = "https://jobs.dou.ua/vacancies/?category=Python"
 JOB_SEARCH_WORK_UA = "https://www.work.ua/jobs-it-python/"
 
 CSV_OUTPUT_PATH = "data/processed/output.csv"
+
+EXCHANGE_RATE: float = 42.5
