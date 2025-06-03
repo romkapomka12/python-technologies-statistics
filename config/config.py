@@ -47,3 +47,8 @@ JOB_SEARCH_WORK_UA = "https://www.work.ua/jobs-it-python/"
 CSV_OUTPUT_PATH = "data/processed/output.csv"
 
 EXCHANGE_RATE: float = 42.5
+
+SOURCE_FOLDERS = {
+    "jobs.dou.ua": "dou",
+    "www.work.ua": "work",
+}
