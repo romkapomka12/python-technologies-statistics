@@ -46,21 +46,14 @@ def clean_title(text: str) -> str:
     if not isinstance(text, str):
         return text
 
-    # Замінити нерозривні пробіли на звичайні
     text = re.sub(r"[\u00A0\u2009\u202F\xa0]", " ", text)
 
-    # Прибрати зайві пробіли
     text = re.sub(r"\s+", " ", text).strip()
 
-    # Прибрати пробіли після відкритої дужки або перед закритою
     text = re.sub(r"\(\s+", "(", text)
     text = re.sub(r"\s+\)", ")", text)
 
-    # Прибрати пробіли перед розділовими знаками (, . : ;)
     text = re.sub(r"\s+([,.:;])", r"\1", text)
-
-    # Прибрати пробіли навколо тире (залишити дефіс без пробілів)
     text = re.sub(r"\s*-\s*", "-", text)
 
     return text
-

@@ -1,19 +1,13 @@
 import random
 import re
 import time
-from abc import ABC
-from typing import Optional, List
-from bs4 import BeautifulSoup
+from typing import Optional
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from config.config import JOB_SEARCH_WORK_UA, JOB_SEARCH_DOU_UA
-from models.models import JobDetail
 from scraping.base_scraper import BaseScraper
 from selenium.webdriver import Chrome as WebDriver
-
 from bs4 import BeautifulSoup
 from typing import List
 
@@ -71,7 +65,7 @@ class JobsDouScraper(BaseScraper):
         super().__init__(driver, url)
         self.soup: Optional[BeautifulSoup] = None
 
-    def get_num_pages(self) -> int:
+    def get_num_pages(self) -> int | None:
         self.driver.get(self.url)
         try:
             header = self.driver.find_element(By.CSS_SELECTOR, "div.b-inner-page-header")
@@ -84,6 +78,7 @@ class JobsDouScraper(BaseScraper):
             return int(numbers[0] if numbers else 0)
         except Exception as e:
             print(f"Не вдалося визначити кількість сторінок: {e}")
+            return None
 
     def get_all_pages_html(self) -> List[str]:
         html_pages = []
