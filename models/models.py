@@ -7,7 +7,7 @@ class JobDetail:
     title: str
     company: str
     location: str
-    salary: str
-    experience: list[str]
+    salary: str | None
+    experience: int | None
     link: str
-    technologies: list[str] = field(default_factory=list)
+    technologies: dict[str, list[str]]
