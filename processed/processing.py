@@ -22,16 +22,18 @@ class VacancyProcessor:
 
         logger.info(f"\n{'=' * 50}")
         logger.info(f"🌐 Старт обробки {site_name}")
-
+        # time.sleep(10)
         scraper = scraper_cls(url, self.driver)
-
+        # time.sleep(10)
         logger.info("📄 Завантаження сторінок...")
         html_pages = scraper.get_all_pages_html()
+
         num_pages = len(html_pages)
         logger.info(f"🔢 Отримано {num_pages} сторінок")
 
         logger.info("🔗 Збір посилань...")
         links = scraper.get_all_links(html_pages)
+
         num_links = len(links)
         logger.info(f"🔗 Знайдено {num_links} посилань")
 
