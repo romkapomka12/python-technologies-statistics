@@ -7,3 +7,4 @@ data/output.csv
 data/cache_vacancies
 logs/parser.log
 data*/
+docs*/
