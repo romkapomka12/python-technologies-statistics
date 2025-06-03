@@ -20,7 +20,7 @@ def main():
         WorkUaScraper, JOB_SEARCH_WORK_UA, parse_work_ua_previews, "Work.ua",
     )
 
-    save_to_file(work_vacancies + dou_vacancies)
+    save_to_file(dou_vacancies + work_vacancies)
 
     elapsed = timedelta(seconds=round(time.time() - start_time))
 
