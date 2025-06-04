@@ -1,16 +1,19 @@
+import os
 import random
 import time
 from typing import List, Any, Tuple, Callable
 from tqdm import tqdm
+
+from config.config import get_random_headers, setup_driver
 from config.logger import logger
 from processed.cache import load_vacancy_from_cache, save_vacancy_to_cache
 from models.models import JobDetail
-from selenium import webdriver
+
 
 
 class VacancyProcessor:
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        self.driver = setup_driver()
 
     def __enter__(self):
         return self
@@ -22,9 +25,9 @@ class VacancyProcessor:
 
         logger.info(f"\n{'=' * 50}")
         logger.info(f"🌐 Старт обробки {site_name}")
-        # time.sleep(10)
+
         scraper = scraper_cls(url, self.driver)
-        # time.sleep(10)
+
         logger.info("📄 Завантаження сторінок...")
         html_pages = scraper.get_all_pages_html()
 
@@ -57,6 +60,10 @@ class VacancyProcessor:
                         vacancy = JobDetail(**cached_data)
                         logger.info(f"Завантажено з кешу: {link}")
                     else:
+                        headers = get_random_headers()
+                        self.driver.execute_cdp_cmd("Network.setExtraHTTPHeaders", {"headers": headers})
+                        logger.info(f"Використовується User-Agent: {headers['User-Agent']}")
+
                         self.driver.get(link)
                         time.sleep(random.uniform(0.5, 0.8))
                         html = self.driver.page_source
