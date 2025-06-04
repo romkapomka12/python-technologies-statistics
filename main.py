@@ -1,5 +1,8 @@
 import time
 from datetime import timedelta
+
+from webdriver_manager.core import driver
+
 from config.config import JOB_SEARCH_WORK_UA, JOB_SEARCH_DOU_UA, setup_driver
 from config.logger import logger, setup_logging
 from processed.processing import collect_vacancies_from_site
@@ -9,7 +12,7 @@ from utils.save import save_to_file
 
 
 def main():
-    driver = setup_driver()
+
     start_time = time.time()
     logger.info("\n ЗАГАЛЬНА ІНФОРМАЦІЯ ДО ЗБОРУ ОПИСІВ:")
 
@@ -25,8 +28,6 @@ def main():
     elapsed = timedelta(seconds=round(time.time() - start_time))
 
     logger.info("Час виконання - %s", elapsed)
-    driver.quit()
-
 
 if __name__ == "__main__":
     setup_logging()
