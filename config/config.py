@@ -1,3 +1,4 @@
+import os
 import random
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -28,14 +29,38 @@ def get_random_headers():
 def setup_driver() -> webdriver.Chrome:
     try:
         logger.info("Ініціалізація Chrome WebDriver")
-        options = Options()
-        options.add_argument(f"user-agent={get_random_headers()}")
-        options.add_argument("--headless=new")
-        options.add_argument("--disable-blink-features=AutomationControlled")
 
-        service = Service(ChromeDriverManager().install())
+        options = Options()
+        options.add_argument('--no-sandbox')
+        options.add_argument('--headless=new')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+
+
+        is_docker = os.path.exists("/.dockerenv")
+
+        if is_docker:
+            logger.info("Запуск у Docker-контейнері")
+            chromedriver_path = "/usr/local/bin/chromedriver"
+            options.binary_location = "/usr/bin/google-chrome-stable"
+
+
+            options.add_argument('--window-size=1920,1080')
+            options.add_argument('--disable-extensions')
+            options.add_argument('--disable-setuid-sandbox')
+            options.add_argument('--disable-infobars')
+
+            service = Service(executable_path=chromedriver_path)
+            logger.info(f"Використовується ChromeDriver: {chromedriver_path}")
+        else:
+            logger.info("Локальний запуск")
+            service = Service(ChromeDriverManager().install())
+
         driver = webdriver.Chrome(service=service, options=options)
+        logger.info("Chrome WebDriver успішно ініціалізовано")
         return driver
+
+
     except Exception as e:
         logger.critical("Помилка ініціалізації WebDriver: %s", str(e), exc_info=True)
         raise
