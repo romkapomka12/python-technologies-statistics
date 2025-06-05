@@ -52,7 +52,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --d
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Установка фиксированной версии ChromeDriver
+
 RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1) \
     && wget -q "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/137.0.7151.68/linux64/chromedriver-linux64.zip" \
     && unzip chromedriver-linux64.zip \
@@ -61,23 +61,35 @@ RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
     && chmod +x /usr/local/bin/chromedriver
 
 
-# Создаем и переходим в директорию приложения
+
 WORKDIR /app
 
-# Копируем файлы зависимостей
 COPY requirements.txt .
 
-# Устанавливаем зависимости Python
 RUN pip install --upgrade pip  && \
-    pip install --no-cache-dir -r requirements.txt --trusted-host pypi.org --trusted-host files.pythonhosted.org
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install jupyter notebook
 
+RUN mkdir -p /app/data/processed /app/notebooks
 
-# Копируем код приложения
 COPY . .
 
-# Переменные окружения для Chrome
+RUN mkdir -p /app/notebooks && \
+    mv analysis/analyze_technologies_by_python.ipynb /app/notebooks/ && \
+    mv analysis/etl.ipynb /app/notebooks/
+
 ENV CHROME_BIN=/usr/bin/google-chrome-stable
 ENV CHROMEDRIVER_PATH=/usr/local/bin/chromedriver
 
-# Запускаем приложение
-CMD ["python", "main.py"]
+EXPOSE 8888
+
+CMD python main.py && \
+    jupyter notebook \
+    --ip=0.0.0.0 \
+    --port=8888 \
+    --no-browser \
+    --allow-root \
+    --NotebookApp.token='' \
+    --NotebookApp.password='' \
+    --NotebookApp.allow_origin='*' \
+    --notebook-dir=/app/notebooks
