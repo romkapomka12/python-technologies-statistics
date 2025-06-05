@@ -5,8 +5,9 @@ import hashlib
 from dataclasses import asdict
 from typing import Optional
 from config.config import SOURCE_FOLDERS
+from utils.save import DATA_DIR
 
-CACHE_DIR = "data/processed/cache_vacancies/"
+CACHE_DIR = os.path.join(DATA_DIR, "cache_vacancies")
 
 
 def _get_source_folder(url: str) -> str:
@@ -29,6 +30,9 @@ def load_vacancy_from_cache(link: str) -> Optional[dict]:
     return None
 
 def save_vacancy_to_cache(link: str, vacancy):
+    if not os.path.exists(CACHE_DIR):
+        os.makedirs(CACHE_DIR)
+
     path = _get_cache_path(link)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(asdict(vacancy), f, ensure_ascii=False, indent=2)

@@ -8,14 +8,21 @@ from config.technologies import technologies_dict, soft_skills_dict
 from models.models import JobDetail
 from utils.cleaning import clean_input_text
 
+current_dir = os.path.dirname(__file__)
+while os.path.basename(os.path.dirname(current_dir)) != "python-technologies-statistics":
+    current_dir = os.path.dirname(current_dir)
+PROJECT_ROOT = os.path.dirname(current_dir)
+
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+DATA_FILE = os.path.join(DATA_DIR, "vacancies.csv")
+
+
 
 def save_to_file(vacancies: list[JobDetail]):
-    output_path = os.path.abspath(r"G:\projects\scryping\python-technologies-statistics\data\processed\output.csv")
-    output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
 
-    with open(output_path, mode="w", newline="", encoding="utf-8") as file:
+    with open(DATA_FILE, mode="w", newline="", encoding="utf-8") as file:
         fieldnames = [
             "date",
             "title",
@@ -35,9 +42,10 @@ def save_to_file(vacancies: list[JobDetail]):
             row.pop("technologies_by_category", None)
             writer.writerow(row)
 
-    logger.info("Дані успішно збережено у %s", output_path)
-
-
+    logger.info("=" * 50)
+    logger.info("Всього -  %d вакансій", len(vacancies))
+    logger.info("Дані успішно збережено у %s", DATA_FILE)
+    logger.info("=" * 50)
 
 
 def normalize_text(text: str) -> str:
