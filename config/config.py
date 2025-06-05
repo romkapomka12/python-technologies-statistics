@@ -28,6 +28,7 @@ def get_random_headers():
 
 def setup_driver() -> webdriver.Chrome:
     try:
+        logger.info("=" * 50)
         logger.info("Ініціалізація Chrome WebDriver")
 
         options = Options()
