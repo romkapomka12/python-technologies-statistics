@@ -1,21 +1,29 @@
 
 # Python Technology Statistics Project Requirements
 
+
+
    ## 📁 Project Overview
+
 
 This project aims to collect, analyze, and visualize statistics on technology requirements in the Python job market.
 It collects job postings from Ukrainian job sites (currently DOU.UA and Work.UA), extracts information about required
 technologies, experience levels, and other job details, and provides tools to analyze this data.
 
+
    ## ✅ Functional Requirements
 
+
 1. The system collects job ads from several Ukrainian job sites:
+
 
    * DOU.UA
    * Work.UA
    Possibility of adding other job sites in the future.
 
+
 2. For each job posting, the system extracts:
+
 
    * Position
    * Company name
@@ -28,7 +36,10 @@ technologies, experience levels, and other job details, and provides tools to an
    * Technologies mentioned in the description
    
 
+
       ## ⚙️ Features of the Implemented Functions
+
+
 
 1. The application cleans and normalizes the extracted data:
 
@@ -53,6 +64,7 @@ technologies, experience levels, and other job details, and provides tools to an
 
       ## 📂Data Storage
 
+
 1. Data storage in a structured format:
 
    * CSV files for easy analysis.
@@ -63,7 +75,9 @@ technologies, experience levels, and other job details, and provides tools to an
    * Identifying trends over time.
    * Automatic logging of key events
    
-         ## Data Analysis
+
+    ## Data Analysis
+
 
 1. Visualizing the results of the analysis:
 
@@ -72,7 +86,9 @@ technologies, experience levels, and other job details, and provides tools to an
    * Experience level distribution.
 
 
+
     ## 🚀 Quick start of the project via Docker:
+
 
 ## 1. Clone the repository
 ```shell
