@@ -100,7 +100,7 @@ technologies_dict = {
     "dax": ["dax"],
     "ms365": ["microsoft 365", "ms365"],
     "jupyter": ["jupyter", "jupyter notebook"],
-    "pytest": ["pytest", "testing", "unit tests"],
+    "pytest": ["pytest", "testing", "unit image"],
     "grpc": ["grpc"],
     "kafka": ["kafka", "event streaming", "message broker"],
     "pytorch": ["pytorch", "machine learning", "deep learning"],

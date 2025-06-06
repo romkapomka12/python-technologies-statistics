@@ -3,8 +3,8 @@ __pycache__/
 .env
 cache/
 venv/
-data/output.csv
-data/cache_vacancies
+
 logs/parser.log
 data*/
 docs*/
+image*/
