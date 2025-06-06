@@ -8,11 +8,7 @@ from config.technologies import technologies_dict, soft_skills_dict
 from models.models import JobDetail
 from utils.cleaning import clean_input_text
 
-current_dir = os.path.dirname(__file__)
-while os.path.basename(os.path.dirname(current_dir)) != "python-technologies-statistics":
-    current_dir = os.path.dirname(current_dir)
-PROJECT_ROOT = os.path.dirname(current_dir)
-
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 DATA_FILE = os.path.join(DATA_DIR, "vacancies.csv")
 
