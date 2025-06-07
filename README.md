@@ -19,7 +19,8 @@ technologies, experience levels, and other job details, and provides tools to an
 
    * DOU.UA
    * Work.UA
-   Possibility of adding other job sites in the future.
+
+   * Possibility of adding other job sites in the future.
 
 
 2. For each job posting, the system extracts:
@@ -138,29 +139,29 @@ technologies, experience levels, and other job details, and provides tools to an
 ```
 Here are examples of charts using the matplotlib library:
  
-markdown:
+
 ![1.png](image/1.png)
 
-markdown:
+
 ![2.png](image/2.png)
 
-markdown:
+
 ![3.png](image/3.png)
 
-markdown:
+
 ![4.png](image/4.png)
 
-markdown:
+
 ![5.png](image/5.png)
 
-markdown:
+
 ![6.1.png](image/6.1.png)
 
-markdown:
+
 ![6.2.png](image/6.2.png)
 
-markdown:
+
 ![6.3.png](image/6.3.png)
 
-markdown:
+
 ![7.png](image/7.png)
